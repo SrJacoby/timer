@@ -5,13 +5,25 @@ const timerResult = document.querySelector('div#timer-result-container')
 let countdown
 
 timerButton.addEventListener('click', function(){
-    const timeValue = timerInput.value
+    const timeValue = timerInput.value //Pegamos o valor do input
 
-    const timeInSeconds = convertTimeToSeconds(timeValue)
+    if(!timeValue || !isValidTime(timeValue)){
+        alert('Por favor, insira um tempo válido.')
+        return
+    }
 
-    if(timerButton.textContent === 'Enviar'){
+    if(!timeValue.trim()){
+        alert('Por favor, preencha todos os campos.')
+        return
+    }
 
-    timerInput.style.display = 'none'
+
+    const timeInSeconds = convertTimeToSeconds(timeValue) //Pega o valor em horas e transforma tudo em segundos
+
+    
+    if(timerButton.textContent === 'Enviar'){ //Criando um if para quando o texto estar escrito 'Enviar'
+
+    timerInput.style.display = 'none'  //esse é pra sumir com o timerInput quando o botão é clicado
 
     timerResult.style.display = 'block'
 
@@ -28,6 +40,26 @@ timerButton.addEventListener('click', function(){
     timerButton.textContent = 'Enviar'
 }
 })
+
+function isValidTime(time){
+    const timeParts = time.split(':')
+    if (timeParts.length !== 3) {
+        return false
+    }
+    const [hours, minutes, seconds] = timeParts.map(part => parseInt(part,10))
+
+    if(isNaN(hours) || isNaN(minutes) || isNaN(seconds)){
+        return false
+    }
+    if(hours < 0 || hours > 23 || minutes < 0 || minutes > 59 || seconds < 0 || seconds > 59){
+        return false
+    }
+    if(timeParts[2].length === 0){
+        return false
+    }
+    return true
+}
+
 
 function convertTimeToSeconds(time){
     const [hours, minutes, seconds] = time.split(':')
